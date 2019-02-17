@@ -19,6 +19,7 @@
     "dotenv": "^6.0.0",
     "express": "^4.16.4",
     "pino": "^5.10.8",
+    "sqlite3": "^4.0.6",
     "swagger-express-middleware": "^2.0.1"
   },
   "devDependencies": {
