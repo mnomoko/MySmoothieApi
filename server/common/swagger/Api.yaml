@@ -67,6 +67,84 @@ paths:
         404:
           description: Example not found
 
+  /smoothies:
+    get:
+      tags:
+        - Smoothies
+      description: Fetch all smoothies
+      responses:
+        200:
+          description: Returns all smoothies
+    post:
+      tags:
+        - Smoothies
+      description: Create a new smoothie
+      parameters:
+        - name: smoothie
+          in: body
+          description: an smoothie
+          required: true
+          schema:
+            $ref: "#/definitions/ExampleBody"
+      responses:
+        200:
+          description: Returns all smoothies
+
+  /smoothies/{id}:
+    get:
+      tags:
+        - Smoothies
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The id of the smoothie to retrieve
+          type: integer
+      responses:
+        200:
+          description: Return the smoothie with the specified id
+        404:
+          description: Smoothies not found
+
+  /fruits:
+    get:
+      tags:
+        - Fruits
+      description: Fetch all fruits
+      responses:
+        200:
+          description: Returns all fruits
+    post:
+      tags:
+        - Fruits
+      description: Create a new fruit
+      parameters:
+        - name: fruit
+          in: body
+          description: an fruit
+          required: true
+          schema:
+            $ref: "#/definitions/ExampleBody"
+      responses:
+        200:
+          description: Returns all fruits
+
+  /fruits/{id}:
+    get:
+      tags:
+        - Fruits
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The id of the fruits to retrieve
+          type: integer
+      responses:
+        200:
+          description: Return the fruits with the specified id
+        404:
+          description: Fruits not found
+
   /spec:
     get:
       tags:

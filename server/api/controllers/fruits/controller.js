@@ -1,23 +1,23 @@
-import SmoothiesService from '../../services/smoothies.service';
+import FruitsService from '../../services/fruits.service';
 
 export class Controller {
   all(req, res) {
-    SmoothiesService.all()
-      .then(r => res.json(r)).catch(err => console.log('error SmmothiesService.all()', err));
+    FruitsService.all()
+      .then(r => res.json(r)).catch(err => console.log('error FruitsService.all()', err));
   }
 
   byId(req, res) {
-    SmoothiesService
+    FruitsService
       .byId(req.params.id)
       .then(r => {
         if (r) res.json(r);
         else res.status(404).end();
       })
-      .catch(err => console.log('error SmmothiesService.byId()', err));
+      .catch(err => console.log('error FruitsService.byId()', err));
   }
 
   create(req, res) {
-    SmoothiesService
+    FruitsService
       .create(req.body.name)
       .then(r => res
         .status(201)

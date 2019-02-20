@@ -1,19 +1,21 @@
-import l from '../../common/logger';
-
-const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database('./server/common/database/datas.db');
+import SmoothieDBService from '../../common/database/smoothie.db.service';
 
 class SmoothiesService {
-  all() {
-
+  async all() {
+    return new Promise((resolve, reject) => {
+      SmoothieDBService.all().then(res => resolve(res)).catch(err => reject(err));
+    });
   }
 
-  byId(id) {
-    l.info(`${this.constructor.name}.byId(${id})`);
-    return db.byId(id);
+  async byId(id) {
+    return new Promise((resolve, reject) => {
+      SmoothieDBService.byId(id).then(res => resolve(res)).catch(err => reject(err));
+    });
   }
 
-  create(smoothie) {
-    return db.insert();
+  async create(smoothie) {
+    return new Promise((resolve, reject) => SmoothieDBService.create(smoothie).then(res => resolve(res)).catch(err => reject(err)));
   }
 }
+
+export default new SmoothiesService();
