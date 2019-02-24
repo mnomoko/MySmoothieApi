@@ -1,4 +1,4 @@
-import SmoothieDBService from '../../common/database/smoothie.db.service';
+import SmoothieDBService from '../../common/database/sqlite/smoothie.db.service';
 
 class SmoothiesService {
   async all() {

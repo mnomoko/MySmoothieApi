@@ -1,4 +1,4 @@
-import FruitDBService from '../../common/database/fruit.db.service';
+import FruitDBService from '../../common/database/sqlite/fruit.db.service';
 
 class FruitsService {
   async all() {
