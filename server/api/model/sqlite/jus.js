@@ -5,6 +5,7 @@ const JUS = {
   CITRON: { code: 'citron', name: 'Jus de citron', gout: GOUTS.ACIDE },
   ANANAS: { code: 'ananas', name: "Jus d'ananas", gout: GOUTS.ACIDE },
   POMME: { code: 'pomme', name: 'Jus de pomme', gout: GOUTS.SUCRE },
+  LAIT_COCO: { code: 'coco', name: 'Lait de coco', gout: GOUTS.SUCRE },
 };
 
 class Jus {
@@ -13,6 +14,7 @@ class Jus {
       case 'orange': return JUS.ORANGE;
       case 'citron': return JUS.CITRON;
       case 'ananas': return JUS.ANANAS;
+      case 'coco': return JUS.LAIT_COCO;
       case 'pomme':
       default:
         return JUS.POMME;

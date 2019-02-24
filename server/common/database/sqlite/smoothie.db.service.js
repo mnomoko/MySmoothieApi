@@ -2,54 +2,47 @@ import l from '../../logger';
 import Smoothie from '../../../api/model/sqlite/smoothie';
 import { DB_LINK } from '../../util';
 import { Jus } from '../../../api/model/sqlite/jus';
-import FruitGoutDbService from './fruit-gout.db.service';
-import Fruit from '../../../api/model/sqlite/fruit';
+import FruitDBService from './fruit.db.service';
+import SmoothieFruitDBService from './smoothie-fruit.db.service';
 
 const sqlite3 = require('sqlite3').verbose();
 
 class SmoothieDBService {
-  all() {
-    const tab = [];
+  async all() {
+    const db = new sqlite3.Database(DB_LINK);
 
-    console.log(DB_LINK);
-    return new Promise((resolve, reject) => {
-      const db = new sqlite3.Database(DB_LINK);
-      db.all('SELECT * FROM smoothie', (err, rows) => {
-        if (err) return reject('error retrieving data', err);
-        rows.forEach(row => {
-          const jus = Jus.getByCode(row.jus);
-          const smooth = new Smoothie(row.id, row.name, jus, row.description);
-          tab.push(smooth);
-        });
+    const smoothieDBFactory = new SmoothieDBFactory();
+
+    return new Promise(async (resolve, reject) => {
+      await db.all('SELECT * FROM smoothie', async (err, rows) => {
+        if (err) reject('error retrieving data', err);
+        const smoothies = await smoothieDBFactory.getSmoothies(rows);
         db.close();
-        return resolve(tab);
+        resolve(smoothies);
       });
     });
   }
 
-  byId(id) {
-    let smooth = null;
-    l.info(`${this.constructor.name}.byId(${id})`);
-    return new Promise((resolve, reject) => {
-      const db = new sqlite3.Database(DB_LINK);
-      db.get('SELECT * FROM smoothie WHERE id = ?', [id], (err, row) => {
-        if (err) return reject('error retrieving data', err);
-        if (row) {
-          const jus = Jus.getByCode(row.jus);
-          smooth = new Smoothie(row.id, row.name, jus, row.description);
-          console.log(JSON.stringify(smooth));
-        }
+  async byId(id) {
+    const db = new sqlite3.Database(DB_LINK);
+
+    const smoothieDBFactory = new SmoothieDBFactory();
+
+    return new Promise(async (resolve, reject) => {
+      await db.get('SELECT * FROM smoothie WHERE id = ?', [id], async (err, row) => {
+        if (err) reject('error retrieving data', err);
+        const fruit = await smoothieDBFactory.getSmoothie(row);
         db.close();
-        return resolve(smooth);
+        resolve(fruit);
       });
     });
   }
 
-  create(smoothie) {
+  async create(smoothie) {
     l.info(`${this.constructor.name}.create(${JSON.stringify(smoothie)})`);
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       const db = new sqlite3.Database(DB_LINK);
-      db.run('INSERT INTO smoothie VALUES (?, ?, ?, ?)', [null, smoothie.name, smoothie.jus, smoothie.description], err => {
+      await db.run('INSERT INTO smoothie VALUES (?, ?, ?, ?)', [null, smoothie.name, smoothie.jus, smoothie.description], err => {
         if (err) reject(err);
         else resolve(true);
         db.close();
@@ -60,13 +53,15 @@ class SmoothieDBService {
 
 class SmoothieDBFactory {
   async getFruitForSmoothie(idSmoothie) {
-    const smoothieWithFruits = await SmoothieFruitDBService.byIdFruit(idSmoothie);
-    return Promise.resolve(smoothieWithFruits ? smoothieWithFruits.map(r => r.id_fruit) : undefined);
+    const smoothieWithFruits = await SmoothieFruitDBService.byIdSmoothie(idSmoothie);
+    return Promise.resolve(smoothieWithFruits ? smoothieWithFruits.map(r => r.idFruit) : undefined);
   }
 
   async getSmoothie(row) {
-    const gouts = await this.getFruitForSmoothie(row.id);
-    const smoothie = new Fruit(row.id, row.name, row.type, gouts, row.preparation);
+    const idFruitForSelectedSmoothie = await this.getFruitForSmoothie(row.id);
+    const fruits = await FruitDBService.byIds(idFruitForSelectedSmoothie);
+    const jus = new Jus().getByCode(row.jus);
+    const smoothie = new Smoothie(row.id, row.name, fruits, jus, row.description);
     return Promise.resolve(smoothie);
   }
 

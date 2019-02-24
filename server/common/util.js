@@ -14,6 +14,7 @@ const GOUTS = [
 ];
 const SMOOTHIES = [
   { id: 1, name: 'Banane Mangue et jus d\'Ananas', jus: 'orange', description: 'Ce smoothie à la fois sucré et acide est parfait pour les amoureux de la mangue et des bananes' },
+  { id: 2, name: 'Smoothie Concombre et Kiwi', jus: 'coco', description: 'Servez le smoothie bien frais donc laissez-le au frais le temps de le servir et ajoutez une rondelle de concombre sur le rebord du verre' },
 ];
 const TYPES = [
   { id: 1, name: 'fruit' },
@@ -68,7 +69,10 @@ const FRUITS = [
 
 const SMOOTHIE_FRUIT = [
   { id: 1, id_smoothie: 1, id_fruit: 2 },
-  { id: 2, id_smoothie: 1, id_fruit: 27 },
+  { id: 2, id_smoothie: 1, id_fruit: 26 },
+  { id: 3, id_smoothie: 2, id_fruit: 9 },
+  { id: 4, id_smoothie: 2, id_fruit: 24 },
+  { id: 5, id_smoothie: 2, id_fruit: 40 },
 ];
 const FRUIT_GOUT = [
   { id: 1, id_fruit: 1, gout: 'sucre' },

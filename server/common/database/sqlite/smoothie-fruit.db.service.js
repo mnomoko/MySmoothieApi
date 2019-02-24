@@ -1,5 +1,5 @@
 import { DB_LINK } from '../../util';
-import FruitGout from '../../../api/model/sqlite/fruit-gout';
+import SmoothieFruit from '../../../api/model/sqlite/smoothie-fruit';
 
 const sqlite3 = require('sqlite3').verbose();
 
@@ -12,7 +12,7 @@ class SmoothieFruitDBService {
       db.all('SELECT * FROM smoothie_fruit', (err, rows) => {
         if (err) return reject(err);
         rows.forEach(row => {
-          tab.push(new FruitGout(row.id, row.id_fruit, row.gout));
+          tab.push(new SmoothieFruit(row.id, row.id_smoothie, row.id_fruit));
         });
         db.close();
         return resolve(tab);
@@ -26,7 +26,7 @@ class SmoothieFruitDBService {
       db.each(`SELECT * FROM smoothie_fruit where id = ${id}`, (err, row) => {
         if (err) return reject(err);
         db.close();
-        return resolve(new FruitGout(row.id, row.id_fruit, row.gout));
+        return resolve(new SmoothieFruit(row.id, row.id_smoothie, row.id_fruit));
       });
     });
   }
@@ -39,7 +39,7 @@ class SmoothieFruitDBService {
       await db.all(`SELECT * FROM smoothie_fruit WHERE id_smoothie = ${id}`, (err, rows) => {
         if (err) return reject(err);
         rows.forEach(row => {
-          tab.push(new FruitGout(row.id, row.id_fruit, row.gout));
+          tab.push(new SmoothieFruit(row.id, row.id_smoothie, row.id_fruit));
         });
         db.close();
         return resolve(tab);

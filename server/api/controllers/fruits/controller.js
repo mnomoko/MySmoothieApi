@@ -1,9 +1,10 @@
+import l from '../../../common/logger';
 import FruitsService from '../../services/fruits.service';
 
 export class Controller {
   all(req, res) {
     FruitsService.all()
-      .then(r => res.json(r)).catch(err => console.log('error FruitsService.all()', err));
+      .then(r => res.json(r)).catch(err => l.error('error FruitsService.all()', err));
   }
 
   byId(req, res) {
@@ -13,7 +14,7 @@ export class Controller {
         if (r) res.json(r);
         else res.status(404).end();
       })
-      .catch(err => console.log('error FruitsService.byId()', err));
+      .catch(err => l.error('error FruitsService.byId()', err));
   }
 
   create(req, res) {

@@ -6,7 +6,7 @@ import * as os from 'os';
 import cookieParser from 'cookie-parser';
 import swaggerify from './swagger';
 import l from './logger';
-import { FRUIT_GOUT, TYPES, SMOOTHIES, FRUITS, GOUTS, JUS, SMOOTHIE_FRUIT, DB_LINK } from './util';
+import { FRUIT_GOUT, SMOOTHIES, FRUITS, SMOOTHIE_FRUIT, DB_LINK } from './util';
 
 const sqlite3 = require('sqlite3').verbose();
 
@@ -34,17 +34,6 @@ export default class ExpressServer {
   }
 
   openDB() {
-    /*
-    const sqlSmoothie = 'CREATE TABLE IF NOT EXISTS smoothie (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, jus INTEGER, description TEXT, FOREIGN KEY(jus) REFERENCES jus(id));';
-    const sqlType = 'CREATE TABLE IF NOT EXISTS type (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT);';
-    const sqlFruit = 'CREATE TABLE IF NOT EXISTS fruit (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, type INTEGER, preparation TEXT, FOREIGN KEY(type) REFERENCES type(id));';
-    const sqlGout = 'CREATE TABLE IF NOT EXISTS gout (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT);';
-    const sqlJus = 'CREATE TABLE IF NOT EXISTS jus (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, gout INTEGER, FOREIGN KEY(gout) REFERENCES gout(id));';
-
-    const sqlSmoothieFruit = 'CREATE TABLE IF NOT EXISTS smoothie_fruit (id INTEGER PRIMARY KEY AUTOINCREMENT, smoothie INTEGER, fruit INTEGER, FOREIGN KEY(smoothie) REFERENCES smoothie(id), FOREIGN KEY(fruit) REFERENCES fruit(id));';
-    const sqlFruitGout = 'CREATE TABLE IF NOT EXISTS fruit_gout (id INTEGER PRIMARY KEY AUTOINCREMENT, fruit INTEGER, gout INTEGER, FOREIGN KEY(fruit) REFERENCES fruit(id), FOREIGN KEY(gout) REFERENCES gout(id));';
-    */
-
     const sqlSmoothie = 'CREATE TABLE IF NOT EXISTS smoothie (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, jus TEXT, description TEXT);';
     const sqlFruit = 'CREATE TABLE IF NOT EXISTS fruit (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, type TEXT, preparation TEXT);';
 
@@ -59,9 +48,6 @@ export default class ExpressServer {
       return this;
     }));
 
-    // this.createTable(db, sqlType);
-    // this.createTable(db, sqlGout);
-    // this.createTable(db, sqlJus);
     this.createTable(db, sqlFruit);
     this.createTable(db, sqlSmoothie);
     this.createTable(db, sqlSmoothieFruit);
@@ -93,9 +79,6 @@ export default class ExpressServer {
   }
 
   insertDatas(db) {
-    // this.insertDatasInTable(db, TYPES, 'type');
-    // this.insertDatasInTable(db, GOUTS, 'gout');
-    // this.insertDatasInTable(db, JUS, 'jus');
     this.insertDatasInTable(db, FRUITS, 'fruit');
     this.insertDatasInTable(db, SMOOTHIES, 'smoothie');
     this.insertDatasInTable(db, SMOOTHIE_FRUIT, 'smoothie_fruit');

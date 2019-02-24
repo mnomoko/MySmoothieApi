@@ -35,6 +35,21 @@ class FruitDBService {
     });
   }
 
+  async byIds(ids) {
+    const db = new sqlite3.Database(DB_LINK);
+
+    const fruitDBFactory = new FruitDBFactory();
+
+    return new Promise(async (resolve, reject) => {
+      await db.all(`SELECT * FROM fruit WHERE id in (${ids.join(',')})`, [], async (err, rows) => {
+        if (err) reject('error retrieving data', err);
+        const fruit = await fruitDBFactory.getFruits(rows);
+        db.close();
+        resolve(fruit);
+      });
+    });
+  }
+
   async create(fruit) {
     const db = new sqlite3.Database(DB_LINK);
 
