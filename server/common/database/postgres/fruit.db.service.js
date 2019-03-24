@@ -1,71 +1,70 @@
-import Fruit from '../../../api/model/sqlite/fruit';
-import { DB_LINK } from '../../util';
+import Fruit from '../../../api/model/fruit';
 import FruitGoutDbService from './fruit-gout.db.service';
 
-const sqlite3 = require('sqlite3').verbose();
-
 class FruitDBService {
-  async all() {
-    const db = new sqlite3.Database(DB_LINK);
-
-    const fruitDBFactory = new FruitDBFactory();
+  async all(pool) {
+    const fruitDBFactory = new FruitDBFactory(pool);
 
     return new Promise(async (resolve, reject) => {
-      await db.all('SELECT * FROM fruit', async (err, rows) => {
+      // const client = await pool.connect();
+      await pool.query('SELECT * FROM fruit', async (err, result) => {
+        // await client.release();
         if (err) reject('error retrieving data', err);
-        const fruits = await fruitDBFactory.getFruits(rows);
-        db.close();
+        const fruits = await fruitDBFactory.getFruits(result.rows);
         resolve(fruits);
       });
     });
   }
 
-  async byId(id) {
-    const db = new sqlite3.Database(DB_LINK);
-
-    const fruitDBFactory = new FruitDBFactory();
+  async byId(pool, id) {
+    const fruitDBFactory = new FruitDBFactory(pool);
 
     return new Promise(async (resolve, reject) => {
-      await db.get('SELECT * FROM fruit WHERE id = ?', [id], async (err, row) => {
+      // const client = await pool.connect();
+      await pool.query(`SELECT * FROM fruit WHERE id = ${id}`, [], async (err, result) => {
+        // await client.release();
         if (err) reject('error retrieving data', err);
+        console.log(JSON.stringify(result));
+        const row = result.rows[0];
         const fruit = await fruitDBFactory.getFruit(row);
-        db.close();
         resolve(fruit);
       });
     });
   }
 
-  async byIds(ids) {
-    const db = new sqlite3.Database(DB_LINK);
-
-    const fruitDBFactory = new FruitDBFactory();
+  async byIds(pool, ids) {
+    const fruitDBFactory = new FruitDBFactory(pool);
 
     return new Promise(async (resolve, reject) => {
-      await db.all(`SELECT * FROM fruit WHERE id in (${ids.join(',')})`, [], async (err, rows) => {
+      // const client = await pool.connect();
+      await pool.query(`SELECT * FROM fruit WHERE id in (${ids.join(',')})`, [], async (err, result) => {
+        // await client.release();
         if (err) reject('error retrieving data', err);
-        const fruit = await fruitDBFactory.getFruits(rows);
-        db.close();
+        const fruit = await fruitDBFactory.getFruits(result.rows);
         resolve(fruit);
       });
     });
   }
 
-  async create(fruit) {
-    const db = new sqlite3.Database(DB_LINK);
-
+  async create(pool, fruit) {
     return new Promise(async (resolve, reject) => {
-      await db.run('INSERT INTO fruit VALUES (?, ?, ?, ?)', [null, fruit.name, fruit.type, fruit.preparation], err => {
+      // const client = await pool.connect();
+      await pool.query('INSERT INTO fruit VALUES ($1, $2, $3, $4)', [null, fruit.name, fruit.type, fruit.preparation], async err => {
+        // await client.release();
         if (err) reject(err);
         else resolve(true);
-        db.close();
       });
     });
   }
 }
 
 class FruitDBFactory {
+  constructor(pool) {
+    this.pool = pool;
+  }
+
   async getGoutForFruit(idFruit) {
-    const fruitWihtGouts = await FruitGoutDbService.byIdFruit(idFruit);
+    const fruitWihtGouts = await FruitGoutDbService.byIdFruit(this.pool, idFruit);
     return Promise.resolve(fruitWihtGouts ? fruitWihtGouts.map(r => r.gout) : undefined);
   }
 

@@ -1,24 +1,24 @@
-import l from '../../../common/logger';
-import SmoothiesService from '../../services/smoothies.service';
+import l from '../../../../common/logger';
+import FruitsService from '../../../services/postgres/fruits.service';
 
 export class Controller {
   all(req, res) {
-    SmoothiesService.all()
-      .then(r => res.json(r)).catch(err => l.error('error SmmothiesService.all()', err));
+    FruitsService.all()
+      .then(r => res.json(r)).catch(err => l.error('error FruitsService.all()', err));
   }
 
   byId(req, res) {
-    SmoothiesService
+    FruitsService
       .byId(req.params.id)
       .then(r => {
         if (r) res.json(r);
         else res.status(404).end();
       })
-      .catch(err => l.error('error SmmothiesService.byId()', err));
+      .catch(err => l.error('error FruitsService.byId()', err));
   }
 
   create(req, res) {
-    SmoothiesService
+    FruitsService
       .create(req.body.name)
       .then(r => res
         .status(201)

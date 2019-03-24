@@ -6,7 +6,7 @@
   "scripts": {
     "start": "babel-node server/index.js",
     "compile": "babel server --out-dir dist --delete-dir-on-start --source-maps inline --copy-files",
-    "dev": "PORT=4000 nodemon server --exec babel-node --config .nodemonrc.json | pino-pretty",
+    "dev": "DB_USER='zrpqiofx' DB_PASSWORD='kchn0orXNC5zHC5mLQlOj9eORyfe4BRD' DB_HOST='manny.db.elephantsql.com' PORT=4000 nodemon server --exec babel-node --config .nodemonrc.json | pino-pretty",
     "dev:debug": "nodemon server --exec babel-node --config .nodemonrc.json --inspect | pino-pretty",
     "test": "mocha --compilers js:@babel/register --exit",
     "test:debug": "mocha --compilers js:@babel/register --inspect-brk --exit",
@@ -14,17 +14,31 @@
     "lint:fix": "eslint --fix -c .eslintrc.json {server,test}/**"
   },
   "dependencies": {
-    "@babel/node": "^7.2.2",
     "@babel/core": "^7.2.2",
+    "@babel/node": "^7.2.2",
     "@babel/preset-env": "^7.2.3",
     "body-parser": "^1.18.2",
     "cookie-parser": "^1.4.3",
     "dotenv": "^6.0.0",
     "express": "^4.16.4",
     "nodemon": "^1.18.4",
+    "pg": "^7.9.0",
     "pino": "^5.10.8",
     "sqlite3": "^4.0.6",
     "swagger-express-middleware": "^2.0.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/node": "^7.2.2",
+    "babel-eslint": "^8.2.2",
+    "chai": "^4.1.2",
+    "eslint": "^4.19.1",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-config-airbnb-base": "^11.3.2",
+    "mocha": "^5.0.5",
+    "nodemon": "^1.18.4",
+    "pino-pretty": "^2.2.2",
+    "supertest": "^3.4.1"
   },
   "author": "Mamadou NOMOKO <m.nomoko.fr@gmail.com> (https://github.com/mnomoko)"
 }
