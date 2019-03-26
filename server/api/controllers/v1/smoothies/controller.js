@@ -19,7 +19,7 @@ export class Controller {
 
   create(req, res) {
     SmoothiesService
-      .create(req.body.name)
+      .create(req.body.smoothie)
       .then(r => res
         .status(201)
         .location(`<%= apiRoot %>/smoothie/${r.id}`)

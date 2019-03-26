@@ -17,56 +17,43 @@ produces:
 
 
 definitions:
-  ExampleBody:
+  Fruit:
     type: object
-    title: example
+    title: fruit
     required:
       - name
     properties:
       name:
         type: string
         example: no_stress
+      type:
+        type: string
+        example: no_stress
+      preparation:
+        type: string
+        example: no_stress
+
+  Smoothie:
+    type: object
+    title: smoothie
+    required:
+      - name
+    properties:
+      name:
+        type: string
+        example: no_stress
+      jus:
+        type: string
+        example: no_stress
+      fruits:
+        type: array
+        items:
+          $ref: "#/definitions/Fruit"
+      description:
+        type: string
+        example: no_stress
 
 paths:
-  /examples:
-    get:
-      tags:
-        - Examples
-      description: Fetch all examples
-      responses:
-        200:
-          description: Returns all examples
-    post:
-      tags:
-        - Examples
-      description: Create a new example
-      parameters:
-        - name: example
-          in: body
-          description: an example
-          required: true
-          schema: 
-            $ref: "#/definitions/ExampleBody"
-      responses:
-        200:
-          description: Returns all examples
-
-  /examples/{id}:
-    get:
-      tags:
-        - Examples
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: The id of the example to retrieve
-          type: integer
-      responses:
-        200:
-          description: Return the example with the specified id
-        404:
-          description: Example not found
-
   /smoothies:
     get:
       tags:
@@ -85,7 +72,7 @@ paths:
           description: an smoothie
           required: true
           schema:
-            $ref: "#/definitions/ExampleBody"
+            $ref: "#/definitions/Smoothie"
       responses:
         200:
           description: Returns all smoothies
@@ -111,20 +98,6 @@ paths:
       tags:
         - Fruits
       description: Fetch all fruits
-      responses:
-        200:
-          description: Returns all fruits
-    post:
-      tags:
-        - Fruits
-      description: Create a new fruit
-      parameters:
-        - name: fruit
-          in: body
-          description: an fruit
-          required: true
-          schema:
-            $ref: "#/definitions/ExampleBody"
       responses:
         200:
           description: Returns all fruits

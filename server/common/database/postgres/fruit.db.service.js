@@ -49,7 +49,7 @@ class FruitDBService {
   async create(pool, fruit) {
     return new Promise(async (resolve, reject) => {
       // const client = await pool.connect();
-      await pool.query('INSERT INTO fruit VALUES ($1, $2, $3, $4)', [null, fruit.name, fruit.type, fruit.preparation], async err => {
+      await pool.query('INSERT INTO fruit (name, type, preparation) VALUES ($1, $2, $3)', [fruit.name, fruit.type, fruit.preparation], async err => {
         // await client.release();
         if (err) reject(err);
         else resolve(true);

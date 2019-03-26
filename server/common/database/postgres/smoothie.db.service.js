@@ -36,13 +36,19 @@ class SmoothieDBService {
   }
 
   async create(pool, smoothie) {
+    const smoothieDBFactory = new SmoothieDBFactory(pool);
+
     l.info(`${this.constructor.name}.create(${JSON.stringify(smoothie)})`);
     return new Promise(async (resolve, reject) => {
-      // const client = await pool.connect();
-      await pool.query('INSERT INTO smoothie VALUES ($1, $2, $3, $4)', [null, smoothie.name, smoothie.jus, smoothie.description], async err => {
-        // await client.release();
+      const fruits = smoothie.fruits;
+      await pool.query('INSERT INTO smoothie (name, jus, description) VALUES ($1, $2, $3) RETURNING *', [smoothie.name, smoothie.jus, smoothie.description], async (err, result) => {
         if (err) reject(err);
-        else resolve(true);
+        else {
+          const smoothieObject = result.rows[0];
+          smoothieDBFactory.getSmoothies(smoothieObject.id, fruits).then(() => {
+            resolve(smoothieObject);
+          });
+        }
       });
     });
   }
@@ -79,6 +85,10 @@ class SmoothieDBFactory {
 
     const datas = await retrieveData(rows);
     return Promise.resolve(datas);
+  }
+
+  async createSmoothie(id, fruits) {
+    await SmoothieFruitDBService.create(this.pool, id, fruits.map(fruit => fruit.id));
   }
 }
 
