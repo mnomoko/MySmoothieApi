@@ -45,7 +45,7 @@ class SmoothieDBService {
         if (err) reject(err);
         else {
           const smoothieObject = result.rows[0];
-          smoothieDBFactory.getSmoothies(smoothieObject.id, fruits).then(() => {
+          smoothieDBFactory.createSmoothie(smoothieObject.id, fruits).then(() => {
             resolve(smoothieObject);
           });
         }
