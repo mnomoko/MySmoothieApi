@@ -45,7 +45,7 @@ class SmoothieFruitDBService {
     }).catch(err => console.log(err));
   }
 
-  create(pool, idSmoothie, fruits) {
+  create(pool, idSmoothie, idsFruit) {
     return new Promise(async (resolve, reject) => {
       // const client = await pool.connect();
       // await pool.query('INSERT INTO smoothie_fruit VALUES ($1, $2, $3)', [null, idSmoothie, idFruit], async err => {
@@ -54,8 +54,7 @@ class SmoothieFruitDBService {
       //   else resolve(true);
       // });
 
-      const idsFruit = fruits.map(fruit => fruit.id);
-      const idsSmoothie = fruits.map(() => idSmoothie);
+      const idsSmoothie = idsFruit.map(() => idSmoothie);
       // await pool.query('INSERT INTO smoothie_fruit (id_smoothie, id_fruit) VALUES $1', Inserts('${$1}, ${$2}', smoothieFruits), async err => {
       //   if (err) reject(err);
       //   else resolve(true);
