@@ -88,6 +88,7 @@ class SmoothieDBFactory {
   }
 
   async createSmoothie(id, fruits) {
+    l.info(`smoothie.db.service: createSmoothie(${id}, ${JSON.stringify(fruits)})`);
     await SmoothieFruitDBService.create(this.pool, id, fruits.map(fruit => fruit.id));
   }
 }

@@ -1,4 +1,5 @@
 import SmoothieFruit from '../../../api/model/smoothie-fruit';
+import l from '../../logger';
 
 class SmoothieFruitDBService {
   all(pool) {
@@ -46,6 +47,7 @@ class SmoothieFruitDBService {
   }
 
   create(pool, idSmoothie, idsFruit) {
+    l.info(`smoothie-fruit.db.service: create(${idSmoothie}, ${JSON.stringify(idsFruit)})`);
     return new Promise(async (resolve, reject) => {
       // const client = await pool.connect();
       // await pool.query('INSERT INTO smoothie_fruit VALUES ($1, $2, $3)', [null, idSmoothie, idFruit], async err => {
