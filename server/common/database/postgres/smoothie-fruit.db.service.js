@@ -47,25 +47,10 @@ class SmoothieFruitDBService {
   }
 
   create(pool, idSmoothie, idsFruit) {
-    l.info(`smoothie-fruit.db.service: create(${idSmoothie}, ${JSON.stringify(idsFruit)})`);
-    return new Promise(async (resolve, reject) => {
-      // const client = await pool.connect();
-      // await pool.query('INSERT INTO smoothie_fruit VALUES ($1, $2, $3)', [null, idSmoothie, idFruit], async err => {
-      //   // // await client.release();
-      //   if (err) reject(err);
-      //   else resolve(true);
-      // });
-
+    return new Promise((resolve, reject) => {
       const idsSmoothie = idsFruit.map(() => idSmoothie);
-      // await pool.query('INSERT INTO smoothie_fruit (id_smoothie, id_fruit) VALUES $1', Inserts('${$1}, ${$2}', smoothieFruits), async err => {
-      //   if (err) reject(err);
-      //   else resolve(true);
-      // });
-      await pool.query('INSERT INTO smoothie_fruit (id_smoothie, id_fruit) SELECT id_smoothie, id_fruit FROM UNNEST ($1::text[], $2::text[]) AS t (id_smoothie, id_fruit)',
-        [
-          idsSmoothie,
-          idsFruit,
-        ], async err => {
+      pool.query('INSERT INTO smoothie_fruit (id_smoothie, id_fruit) SELECT id_smoothie, id_fruit FROM UNNEST ($1::int[], $2::int[]) AS t (id_smoothie, id_fruit)',
+        [idsSmoothie, idsFruit], err => {
           if (err) reject(err);
           else resolve(true);
         });

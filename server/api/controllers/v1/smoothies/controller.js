@@ -14,16 +14,17 @@ export class Controller {
         if (r) res.json(r);
         else res.status(404).end();
       })
-      .catch(err => l.error('error SmmothiesService.byId()', err));
+      .catch(err => res.status(500).json(err));
   }
 
   create(req, res) {
     SmoothiesService
-      .create(req.body.smoothie)
-      .then(r => res
-        .status(201)
-        .location(`<%= apiRoot %>/smoothie/${r.id}`)
-        .json(r));
+      .create(req.body)
+      .then(r => {
+        if (r) res.json(r);
+        else res.status(404).end();
+      })
+      .catch(err => res.status(500).json(err));
   }
 }
 export default new Controller();

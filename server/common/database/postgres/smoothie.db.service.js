@@ -35,19 +35,23 @@ class SmoothieDBService {
     });
   }
 
-  async create(pool, smoothie) {
+  create(pool, smoothie) {
     const smoothieDBFactory = new SmoothieDBFactory(pool);
 
-    l.info(`${this.constructor.name}.create(${JSON.stringify(smoothie)})`);
-    return new Promise(async (resolve, reject) => {
+    return new Promise((resolve, reject) => {
       const fruits = smoothie.fruits;
-      await pool.query('INSERT INTO smoothie (name, jus, description) VALUES ($1, $2, $3) RETURNING *', [smoothie.name, smoothie.jus, smoothie.description], async (err, result) => {
+      const jus = new Jus().getByCode(smoothie.jus);
+      pool.query('INSERT INTO smoothie (name, jus, description) VALUES ($1, $2, $3) RETURNING *', [smoothie.name, jus.code, smoothie.description], (err, result) => {
         if (err) reject(err);
         else {
-          const smoothieObject = result.rows[0];
-          smoothieDBFactory.createSmoothie(smoothieObject.id, fruits).then(() => {
-            resolve(smoothieObject);
-          });
+          const smoothieObject = Object.assign({}, smoothie);
+          smoothieObject.id = result.rows[0].id;
+          smoothieDBFactory.createSmoothie(smoothieObject.id, fruits)
+            .then(() => {
+              // resolve(JSON.stringify(smoothieObject));
+              resolve(smoothieObject);
+            })
+            .catch(error => reject(error));
         }
       });
     });
@@ -87,9 +91,12 @@ class SmoothieDBFactory {
     return Promise.resolve(datas);
   }
 
-  async createSmoothie(id, fruits) {
-    l.info(`smoothie.db.service: createSmoothie(${id}, ${JSON.stringify(fruits)})`);
-    await SmoothieFruitDBService.create(this.pool, id, fruits.map(fruit => fruit.id));
+  createSmoothie(id, fruits) {
+    return new Promise((resolve, reject) => {
+      SmoothieFruitDBService.create(this.pool, id, fruits.map(fruit => fruit.id)).then(res => {
+        resolve(res);
+      }).catch(err => reject(err));
+    });
   }
 }
 

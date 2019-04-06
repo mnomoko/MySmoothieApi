@@ -2,12 +2,11 @@ import Fruit from '../../../api/model/fruit';
 import FruitGoutDbService from './fruit-gout.db.service';
 
 class FruitDBService {
-  async all(pool) {
+  all(pool) {
     const fruitDBFactory = new FruitDBFactory(pool);
 
-    return new Promise(async (resolve, reject) => {
-      // const client = await pool.connect();
-      await pool.query('SELECT * FROM fruit', async (err, result) => {
+    return new Promise((resolve, reject) => {
+      pool.query('SELECT * FROM fruit', async (err, result) => {
         // await client.release();
         if (err) reject('error retrieving data', err);
         const fruits = await fruitDBFactory.getFruits(result.rows);

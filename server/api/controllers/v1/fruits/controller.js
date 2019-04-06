@@ -23,7 +23,8 @@ export class Controller {
       .then(r => res
         .status(201)
         .location(`<%= apiRoot %>/smoothie/${r.id}`)
-        .json(r));
+        .json(r))
+      .catch(err => l.error('error FruitsService.create()', err));
   }
 }
 export default new Controller();
