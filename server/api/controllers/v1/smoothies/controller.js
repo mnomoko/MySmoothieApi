@@ -26,5 +26,15 @@ export class Controller {
       })
       .catch(err => res.status(500).json(err));
   }
+
+  update(req, res) {
+    SmoothiesService
+      .update(req.params.id, req.body)
+      .then(r => {
+        if (r) res.json(r);
+        else res.status(400).end();
+      })
+      .catch(err => res.status(500).json(err));
+  }
 }
 export default new Controller();

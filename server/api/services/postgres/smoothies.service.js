@@ -23,6 +23,14 @@ class SmoothiesService {
       }).catch(err => reject(err));
     });
   }
+
+  update(id, smoothie) {
+    return new Promise((resolve, reject) => {
+      SmoothieDBService.update(pool, id, smoothie).then(res => {
+        resolve(res);
+      }).catch(err => reject(err));
+    });
+  }
 }
 
 export default new SmoothiesService();

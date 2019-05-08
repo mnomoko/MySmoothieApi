@@ -96,6 +96,31 @@ paths:
           description: Return the smoothie with the specified id
         404:
           description: Smoothies not found
+    put:
+      tags:
+        - Smoothies
+      description: Update a smoothie
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The id of the smoothie to retrieve
+          type: integer
+        - name: smoothie
+          in: body
+          description: an smoothie
+          required: true
+          schema:
+            $ref: "#/definitions/Smoothie"
+      responses:
+        200:
+          description: Return smoothie
+        404:
+          description: Smoothies not found
 
   /fruits:
     get:

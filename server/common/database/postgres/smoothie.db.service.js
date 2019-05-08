@@ -56,6 +56,38 @@ class SmoothieDBService {
       });
     });
   }
+
+  update(pool, id, smoothie) {
+    const smoothieDBFactory = new SmoothieDBFactory(pool);
+
+    return new Promise((resolve, reject) => {
+      const fruits = smoothie.fruits;
+      console.log('fruits : ', fruits);
+      const jus = new Jus().getByCode(smoothie.jus);
+      pool.query('UPDATE smoothie SET name = $1, jus = $2, description = $3 WHERE id = $4', [smoothie.name, jus.code, smoothie.description, smoothie.id], (err, result) => {
+        if (err) reject(err);
+        else {
+          const smoothieObject = Object.assign({}, smoothie);
+          smoothieDBFactory.deleteSmoothieFruits(id)
+            .then(() => {
+              smoothieDBFactory.createSmoothie(id, fruits)
+                .then(() => {
+                  resolve(smoothieObject);
+                });
+            });
+        }
+      });
+    });
+  }
+
+  delete(pool, id) {
+    return new Promise((resolve, reject) => {
+      pool.query('DELETE FROM smoothie WHERE id = $1', [id], err => {
+        if (err) reject(err);
+        else resolve(true);
+      });
+    });
+  }
 }
 
 class SmoothieDBFactory {
@@ -94,6 +126,22 @@ class SmoothieDBFactory {
   createSmoothie(id, fruits) {
     return new Promise((resolve, reject) => {
       SmoothieFruitDBService.create(this.pool, id, fruits.map(fruit => fruit.id)).then(res => {
+        resolve(res);
+      }).catch(err => reject(err));
+    });
+  }
+
+  updateSmoothie(id, fruits) {
+    return new Promise((resolve, reject) => {
+      SmoothieFruitDBService.update(this.pool, id, fruits.map(fruit => fruit.id)).then(res => {
+        resolve(res);
+      }).catch(err => reject(err));
+    });
+  }
+
+  deleteSmoothieFruits(id) {
+    return new Promise((resolve, reject) => {
+      SmoothieFruitDBService.delete(this.pool, id).then(res => {
         resolve(res);
       }).catch(err => reject(err));
     });

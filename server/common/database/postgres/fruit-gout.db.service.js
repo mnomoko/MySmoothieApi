@@ -48,7 +48,6 @@ class FruitGoutDbService {
   }
 
   create(pool, fruitGout) {
-
     return new Promise((resolve, reject) => {
       // const client = await pool.connect();
       pool.query('INSERT INTO fruit_gout (id_fruit, gout) VALUES ($1, $2)', [fruitGout.id_fruit, fruitGout.gout], async (err, res) => {

@@ -56,6 +56,16 @@ class SmoothieFruitDBService {
         });
     });
   }
+
+  delete(pool, idSmoothie) {
+    return new Promise((resolve, reject) => {
+      pool.query('DELETE FROM smoothie_fruit WHERE id_smoothie = $1',
+        [idSmoothie], err => {
+          if (err) reject(err);
+          else resolve(true);
+        });
+    });
+  }
 }
 
 export default new SmoothieFruitDBService();
