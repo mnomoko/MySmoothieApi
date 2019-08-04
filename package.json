@@ -6,8 +6,9 @@
   "scripts": {
     "start": "babel-node server/index.js",
     "compile": "babel server --out-dir dist --delete-dir-on-start --source-maps inline --copy-files",
-    "dev": "DB_USER='zvsfaudbmipzur' DB_PASSWORD='7fa7e2e115e6d911e4373492134e10da363e1cc2c780317490accda1a4a962b1' DB_HOST='ec2-23-23-173-30.compute-1.amazonaws.com' DB_NAME='d3upoc4sr2vs83' PORT=4000 nodemon server --exec babel-node --config .nodemonrc.json | pino-pretty",
-    "dev:debug": "DB_USER='zvsfaudbmipzur' DB_PASSWORD='7fa7e2e115e6d911e4373492134e10da363e1cc2c780317490accda1a4a962b1' DB_HOST='ec2-23-23-173-30.compute-1.amazonaws.com' DB_NAME='d3upoc4sr2vs83' PORT=4000 nodemon server --exec babel-node --config .nodemonrc.json --inspect | pino-pretty -c -t",
+    "dev": "DATABASE_URL='postgres://zvsfaudbmipzur:7fa7e2e115e6d911e4373492134e10da363e1cc2c780317490accda1a4a962b1@ec2-23-23-173-30.compute-1.amazonaws.com:5432/d3upoc4sr2vs83?ssl=true' PORT=4000 nodemon server --exec babel-node --config .nodemonrc.json | pino-pretty",
+    "dev:debug": "DATABASE_URL='postgres://zvsfaudbmipzur:7fa7e2e115e6d911e4373492134e10da363e1cc2c780317490accda1a4a962b1@ec2-23-23-173-30.compute-1.amazonaws.com:5432/d3upoc4sr2vs83?ssl=true' PORT=4000 nodemon server --exec babel-node --config .nodemonrc.json --inspect | pino-pretty -c -t",
+    "dev:deprecated": "DB_USER='zvsfaudbmipzur' DB_PASSWORD='7fa7e2e115e6d911e4373492134e10da363e1cc2c780317490accda1a4a962b1' DB_HOST='ec2-23-23-173-30.compute-1.amazonaws.com' DB_NAME='d3upoc4sr2vs83' PORT=4000 nodemon server --exec babel-node --config .nodemonrc.json | pino-pretty",
     "test": "mocha --compilers js:@babel/register --exit",
     "test:debug": "mocha --compilers js:@babel/register --inspect-brk --exit",
     "lint": "eslint -c .eslintrc.json {server,test}/**",
