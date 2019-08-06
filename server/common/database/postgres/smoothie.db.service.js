@@ -27,7 +27,6 @@ class SmoothieDBService {
       await pool.query('SELECT * FROM smoothie WHERE id = $1', [id], async (err, result) => {
         // await client.release();
         if (err) reject('error retrieving data', err);
-        console.log(result);
         const row = result.rows[0];
         const fruit = await smoothieDBFactory.getSmoothie(row);
         resolve(fruit);
@@ -62,7 +61,6 @@ class SmoothieDBService {
 
     return new Promise((resolve, reject) => {
       const fruits = smoothie.fruits;
-      console.log('fruits : ', fruits);
       const jus = new Jus().getByCode(smoothie.jus);
       pool.query('UPDATE smoothie SET name = $1, jus = $2, description = $3 WHERE id = $4', [smoothie.name, jus.code, smoothie.description, smoothie.id], (err, result) => {
         if (err) reject(err);

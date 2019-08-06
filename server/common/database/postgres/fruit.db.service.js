@@ -23,7 +23,6 @@ class FruitDBService {
       await pool.query(`SELECT * FROM fruit WHERE id = ${id}`, [], async (err, result) => {
         // await client.release();
         if (err) reject('error retrieving data', err);
-        console.log(JSON.stringify(result));
         const row = result.rows[0];
         const fruit = await fruitDBFactory.getFruit(row);
         resolve(fruit);
